@@ -16,12 +16,15 @@
 
 <body>
   <h2>Hello from jsp</h2>
-  <h3>
+  <!-- <h3>
     ${eric}
   </h3>
   <h4>
     ${hoang}
-  </h4>
+  </h4> -->
+
+
+ 
   <input name="" id="" class="btn btn-primary" type="button" value="Button"/>
 
 </body>
