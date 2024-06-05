@@ -25,7 +25,7 @@
 
 
  
-  <input name="" id="" class="btn btn-primary" type="button" value="Button"/>
+  <a href="/admin/user" class="btn btn-primary">Button</a>
 
 </body>
 

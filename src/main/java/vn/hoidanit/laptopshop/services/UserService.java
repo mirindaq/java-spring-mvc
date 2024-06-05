@@ -32,4 +32,8 @@ public class UserService {
     return this.userRepository.findByEmail(email);
   }
 
+  public User findUserById(long id) {
+    return this.userRepository.findById(id);
+  }
+
 }
