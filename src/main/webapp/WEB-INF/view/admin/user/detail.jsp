@@ -1,6 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
     <!DOCTYPE html>
     <html lang="en">
@@ -27,19 +26,20 @@
                 <li class="breadcrumb-item active">User</li>
               </ol>
               <div class="row mt-3">
-                <div class="alert alert-danger" role="alert">
-                  Are you sure delete the user with id = ${id}?
+                <div class="card" style="width: 90%;">
+                  <div class="card-header">
+                  User information
+                  </div>
+                  <ul class="list-group list-group-flush">
+                  <li class="list-group-item">ID: ${user.id}</li>
+                  <li class="list-group-item">Email: ${user.email}</li>
+                  <li class="list-group-item">Full name: ${user.fullName}</li>
+                  <li class="list-group-item">Address: ${user.address}</li>
+                  </ul>
                 </div>
               </div>
-              <div class="row mt-3 d-flex">
-                <form:form action="/admin/user/delete" method="post" modelAttribute="user" style="width: 120px;">
-                  <div class="mb-3" style="display: none;">
-                    <label class="form-label">ID:</label>
-                    <form:input type="text" path="id" class="form-control" value="${id}" />
-                  </div>
-                  <button class="btn btn-success w-100" type="submit">Confirm</button>
-                </form:form>
-                <a href="/admin/user" class="btn btn-primary" style="width: 120px;">Back</a> 
+              <div class="row mt-3">
+                <a href="/admin/user" class="btn btn-success w-25">Back</a>
               </div>
             </div>
           </main>
