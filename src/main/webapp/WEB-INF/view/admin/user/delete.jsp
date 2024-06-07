@@ -24,14 +24,16 @@
         Are you sure delete the user?
       </div>
     </div>
-    <form:form action="/admin/user/delete" method="post" modelAttribute="user">
-      <div class="mb-3" style="display: none;">
-        <label class="form-label">ID:</label>
-        <form:input type="text" path="id" class="form-control" value="${id}" />
-      </div>
-      <button class="btn btn-success" type="submit">Confirm</button>
-    </form:form>
-    <a href="/admin/user" class="btn btn-primary" style="width: 120px;">Back</a> 
+    <div class="row mt-3 d-flex">
+      <form:form action="/admin/user/delete" method="post" modelAttribute="user" style="width: 120px;">
+        <div class="mb-3" style="display: none;">
+          <label class="form-label">ID:</label>
+          <form:input type="text" path="id" class="form-control" value="${id}" />
+        </div>
+        <button class="btn btn-success w-100" type="submit">Confirm</button>
+      </form:form>
+      <a href="/admin/user" class="btn btn-primary" style="width: 120px;">Back</a> 
+    </div>
   </div>
 
 
