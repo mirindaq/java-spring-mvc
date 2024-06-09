@@ -92,6 +92,14 @@ public class Product {
         this.target = target;
     }
 
+    public ProductDetail getProductDetail() {
+        return productDetail;
+    }
+
+    public void setProductDetail(ProductDetail productDetail) {
+        this.productDetail = productDetail;
+    }
+
     @Override
     public String toString() {
         return "Product [id=" + id + ", name=" + name + ", price=" + price + ", image=" + image + ", quantity="

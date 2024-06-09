@@ -18,9 +18,46 @@
       <div id="layoutSidenav">
         <jsp:include page="../layout/sidebar.jsp"/>
         <div id="layoutSidenav_content">
-          <div>1</div>
-          <div>1</div>
-          <div>1</div>
+         <main>
+            <div class="container-fluid px-4">              
+              <div class="row d-flex justify-content-between align-items-center">
+                <div class="w-50">
+                  <h1 class="mt-4">Product</h1>
+                  <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item">Dashboard</li>
+                    <li class="breadcrumb-item active">Product</li>
+                  </ol>
+                </div>                
+                <a href="/admin/product/create" class="btn btn-primary" style="width: 150px; height:45px">Create a Product</a>
+              </div>
+              <div class="row mt-3">
+                <table class="table">
+                  <thead>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Factory</th>
+                    <th>Action</th>
+                  </thead>
+                  <tbody>
+                    <c:forEach var="product" items="${listProduct}">
+                      <tr>
+                        <td>${product.id}</td>
+                        <td>${product.name}</td>
+                        <td>${product.price}</td>
+                        <td>${product.factory}</td>
+                        <td>
+                          <a href="#" class="btn btn-success">View</a>
+                          <a href="#" class="btn btn-warning">Update</a>
+                          <a href="#" class="btn btn-danger">Delete</a>
+                        </td>
+                      </tr>
+                    </c:forEach>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </main> 
           <jsp:include page="../layout/footer.jsp"/>
         </div>
       </div>
