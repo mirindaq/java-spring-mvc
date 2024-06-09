@@ -2,7 +2,6 @@ package vn.hoidanit.laptopshop.controller.admin;
 
 import java.util.List;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,11 +31,11 @@ public class UserController {
     this.passwordEncoder = passwordEncoder;
   }
 
-  @GetMapping("/")
-  public String getHomePage(Model model) {
-    String text = this.userService.handleHello();
-    return "hello";
-  }
+  // @GetMapping("/")
+  // public String getHomePage(Model model) {
+  // String text = this.userService.handleHello();
+  // return text;
+  // }
 
   @GetMapping("/admin/user/create")
   public String getCreatePage(Model model) {

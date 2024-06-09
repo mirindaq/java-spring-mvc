@@ -1,9 +1,5 @@
 package vn.hoidanit.laptopshop.domain;
 
-import java.util.List;
-
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
