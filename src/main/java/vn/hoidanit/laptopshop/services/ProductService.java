@@ -3,6 +3,7 @@ package vn.hoidanit.laptopshop.services;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.laptopshop.domain.Product;
+import vn.hoidanit.laptopshop.domain.ProductDetail;
 import vn.hoidanit.laptopshop.repository.ProductDetailRepository;
 import vn.hoidanit.laptopshop.repository.ProductRepository;
 import java.util.List;
@@ -24,5 +25,15 @@ public class ProductService {
 
   public List<Product> findAll() {
     return this.productRepository.findAll();
+  }
+
+  public Product findById(Long id) {
+    Product product = this.productRepository.findOneById(id);
+    return product;
+  }
+
+  public void deleteById(Long id) {
+    this.productRepository.deleteById(id);
+    this.productDetailRepository.deleteById(id);
   }
 }

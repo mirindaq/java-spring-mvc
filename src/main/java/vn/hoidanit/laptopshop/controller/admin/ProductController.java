@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,7 @@ import vn.hoidanit.laptopshop.domain.ProductDetail;
 import vn.hoidanit.laptopshop.services.ProductService;
 import vn.hoidanit.laptopshop.services.UploadFileService;
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ProductController {
@@ -58,6 +60,61 @@ public class ProductController {
     productDetail.setShortDesc(newProduct.getProductDetail().getShortDesc());
     newProduct.setProductDetail(productDetail);
     this.productService.handleSaveProduct(newProduct);
+    return "redirect:/admin/product";
+  }
+
+  @GetMapping("/admin/product/{id}")
+  public String getProductDetailPage(Model model, @PathVariable Long id) {
+    model.addAttribute("product", this.productService.findById(id));
+    return "/admin/product/detail";
+  }
+
+  @GetMapping("/admin/product/update/{id}")
+  public String getUpdateProductPage(Model model, @PathVariable Long id) {
+    model.addAttribute("updateProduct", this.productService.findById(id));
+    return "/admin/product/update";
+  }
+
+  @PostMapping("/admin/product/update/{id}")
+  public String updateProduct(@ModelAttribute("updateProduct") @Valid Product newProduct,
+      BindingResult newProductBindingResult,
+      @RequestParam("productFile") MultipartFile file) {
+
+    // validate
+    if (newProductBindingResult.hasErrors()) {
+      return "/admin/product/update";
+    }
+    //
+    Product product = this.productService.findById(newProduct.getId());
+
+    if (!file.isEmpty()) {
+      String imgString = this.uploadFileService.handleUploadFile(file, "product");
+      product.setImage(imgString);
+    }
+
+    product.setFactory(newProduct.getFactory());
+    product.setName(newProduct.getName());
+    product.setPrice(newProduct.getPrice());
+    product.setProductDetail(newProduct.getProductDetail());
+    product.setQuantity(newProduct.getQuantity());
+    product.setSold(newProduct.getSold());
+    product.setTarget(newProduct.getTarget());
+
+    this.productService.handleSaveProduct(product);
+
+    return "redirect:/admin/product";
+  }
+
+  @GetMapping("/admin/product/delete/{id}")
+  public String getDeleteProductPage(Model model, @PathVariable Long id) {
+    model.addAttribute("id", id);
+    model.addAttribute("product", this.productService.findById(id));
+    return "/admin/product/delete";
+  }
+
+  @PostMapping("/admin/product/delete")
+  public String deleteProduct(@ModelAttribute("product") Product product) {
+    this.productService.deleteById(product.getId());
     return "redirect:/admin/product";
   }
 
