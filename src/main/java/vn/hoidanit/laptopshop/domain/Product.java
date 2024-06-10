@@ -8,6 +8,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "products")
@@ -16,16 +21,26 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
+    @NotEmpty(message = "Tên sản phẩm không được để trống")
     private String name;
+
+    @NotNull
+    @DecimalMin(value = "0", inclusive = false, message = "Price phải lớn hơn 0")
     private double price;
+
     private String image;
+    @NotNull
+    @Min(value = 1, message = "Số lượng cần lớn hơn hoặc bằng 1")
     private long quantity;
+
     private long sold;
     private String factory;
     private String target;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_detail", referencedColumnName = "id")
+    @Valid
     private ProductDetail productDetail;
 
     public long getId() {
