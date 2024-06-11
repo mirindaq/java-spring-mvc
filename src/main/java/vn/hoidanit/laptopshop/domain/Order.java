@@ -20,12 +20,13 @@ public class Order {
 
     private double totalPrice;
 
+    // user id
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "order")
-    private List<OrderDetail> orderDetails;
+    List<OrderDetail> orderDetails;
 
     public long getId() {
         return id;

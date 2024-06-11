@@ -1,14 +1,11 @@
 package vn.hoidanit.laptopshop.domain;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -30,6 +27,16 @@ public class Product {
     private double price;
 
     private String image;
+
+    @NotNull
+    @NotEmpty(message = "detailDesc không được để trống")
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String detailDesc;
+
+    @NotNull
+    @NotEmpty(message = "shortDesc không được để trống")
+    private String shortDesc;
+
     @NotNull
     @Min(value = 1, message = "Số lượng cần lớn hơn hoặc bằng 1")
     private long quantity;
@@ -37,11 +44,6 @@ public class Product {
     private long sold;
     private String factory;
     private String target;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_detail", referencedColumnName = "id")
-    @Valid
-    private ProductDetail productDetail;
 
     public long getId() {
         return id;
@@ -73,6 +75,22 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getDetailDesc() {
+        return detailDesc;
+    }
+
+    public void setDetailDesc(String detailDesc) {
+        this.detailDesc = detailDesc;
+    }
+
+    public String getShortDesc() {
+        return shortDesc;
+    }
+
+    public void setShortDesc(String shortDesc) {
+        this.shortDesc = shortDesc;
     }
 
     public long getQuantity() {
@@ -107,18 +125,10 @@ public class Product {
         this.target = target;
     }
 
-    public ProductDetail getProductDetail() {
-        return productDetail;
-    }
-
-    public void setProductDetail(ProductDetail productDetail) {
-        this.productDetail = productDetail;
-    }
-
     @Override
     public String toString() {
-        return "Product [id=" + id + ", name=" + name + ", price=" + price + ", image=" + image + ", quantity="
-                + quantity + ", sold=" + sold + ", factory="
+        return "Product [id=" + id + ", name=" + name + ", price=" + price + ", image=" + image + ", detailDesc="
+                + detailDesc + ", shortDesc=" + shortDesc + ", quantity=" + quantity + ", sold=" + sold + ", factory="
                 + factory + ", target=" + target + "]";
     }
 

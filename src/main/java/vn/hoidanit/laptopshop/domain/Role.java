@@ -17,8 +17,10 @@ public class Role {
     private long id;
 
     private String name;
+
     private String description;
 
+    // role - one => many - users . ctrl + k . press 's'
     @OneToMany(mappedBy = "role")
     private List<User> users;
 

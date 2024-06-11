@@ -8,5 +8,5 @@ import vn.hoidanit.laptopshop.domain.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
-  Role findOneByName(String name);
+    Role findByName(String name);
 }
