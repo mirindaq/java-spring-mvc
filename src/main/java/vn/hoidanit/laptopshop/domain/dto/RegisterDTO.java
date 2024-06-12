@@ -1,9 +1,15 @@
 package vn.hoidanit.laptopshop.domain.dto;
 
+import vn.hoidanit.laptopshop.service.validator.RegisterChecked;
+import vn.hoidanit.laptopshop.service.validator.StrongPassword;
+
+@RegisterChecked
 public class RegisterDTO {
   private String firstName;
   private String lastName;
   private String email;
+
+  @StrongPassword(message = "Password phải tối thiểu có 8 ký tự, bao gồm chữ hoa, chữ thường và kí tự đặc biệt")
   private String password;
   private String confirmPassword;
 
