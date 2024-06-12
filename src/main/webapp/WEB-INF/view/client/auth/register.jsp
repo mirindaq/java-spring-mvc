@@ -39,21 +39,29 @@
                                                     <c:set var="errorEmail">
                                                         <form:errors path="email" cssClass="invalid-feedback" />
                                                     </c:set>
+                                                    <c:set var="errFirstName">
+                                                        <form:errors path="firstName" cssClass="invalid-feedback" />
+                                                    </c:set>
+                                                    <c:set var="errLastName">
+                                                        <form:errors path="lastName" cssClass="invalid-feedback" />
+                                                    </c:set>
                                                     <div class="row mb-3">
                                                         <div class="col-md-6">
                                                             <div class="form-floating mb-3 mb-md-0">
-                                                                <form:input class="form-control" type="text"
+                                                                <form:input class="form-control ${not empty errFirstName ? 'is-invalid' : ''}" type="text"
                                                                     placeholder="Enter your first name"
                                                                     path="firstName" />
                                                                 <label for="inputFirstName">First name</label>
+                                                                ${errFirstName}
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-floating">
-                                                                <form:input class="form-control" type="text"
+                                                                <form:input class="form-control ${not empty errLastName ? 'is-invalid' : ''}" type="text"
                                                                     placeholder="Enter your last name"
                                                                     path="lastName" />
                                                                 <label for="inputLastName">Last name</label>
+                                                                ${errLastName}
                                                             </div>
                                                         </div>
                                                     </div>
