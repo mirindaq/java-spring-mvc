@@ -41,12 +41,12 @@ public class HomePageController {
 
     @GetMapping("/register")
     public String getRegisterPage(Model model) {
-        model.addAttribute("registerDTO", new RegisterDTO());
+        model.addAttribute("registerUser", new RegisterDTO());
         return "client/auth/register";
     }
 
     @PostMapping("/register")
-    public String postMethodName(@ModelAttribute("registerDTO") @Valid RegisterDTO registerDTO,
+    public String postMethodName(@ModelAttribute("registerUser") @Valid RegisterDTO registerDTO,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
