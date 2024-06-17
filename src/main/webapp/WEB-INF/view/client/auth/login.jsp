@@ -29,7 +29,12 @@
                                             <div class="card-body">
                                                 <form method="post" action="/login">
                                                     <c:if test="${param.error != null}">
-                                                        <div class="my-2" style="color: red;">Invalid email or password.</div>
+                                                        <div class="my-2" style="color: red;">Invalid email or password.
+                                                        </div>
+                                                    </c:if>
+                                                    <c:if test="${param.logout != null}">
+                                                        <div class="my-2" style="color: green;">Logout success.
+                                                        </div>
                                                     </c:if>
 
                                                     <div class="form-floating mb-3">
@@ -43,7 +48,9 @@
                                                         <label>Password</label>
                                                     </div>
                                                     <div>
-                                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                                        <input type="hidden" name="${_csrf.parameterName}"
+                                                            value="${_csrf.token}" />
+
                                                     </div>
 
                                                     <div class="mt-4 mb-0">
