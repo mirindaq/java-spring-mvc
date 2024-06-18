@@ -60,6 +60,14 @@ public class User {
         this.role = role;
     }
 
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
     public List<Order> getOrders() {
         return orders;
     }

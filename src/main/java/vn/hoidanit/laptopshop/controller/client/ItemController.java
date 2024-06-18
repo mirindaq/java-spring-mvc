@@ -1,23 +1,20 @@
 package vn.hoidanit.laptopshop.controller.client;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import vn.hoidanit.laptopshop.domain.Cart;
+import vn.hoidanit.laptopshop.domain.CartDetail;
 import vn.hoidanit.laptopshop.domain.Product;
+import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.service.ProductService;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ItemController {
@@ -37,12 +34,31 @@ public class ItemController {
     }
 
     @PostMapping("/add-product-to-cart/{id}")
-    public String addProductToCart(@PathVariable Long id, Authentication authentication) {
-        // HttpSession session = request.getSession();
-        // String email = (String) session.getAttribute("email");
-        String email = authentication.getName();
-        this.productService.handleAddProductToCart(email, id);
+    public String addProductToCart(@PathVariable Long id, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+        // String email = authentication.getName();
+        this.productService.handleAddProductToCart(email, id, session);
         return "redirect:/";
+    }
+
+    @GetMapping("/cart")
+    public String getCartPage(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User newUser = new User();
+        Long id = (Long) session.getAttribute("id");
+        newUser.setId(id);
+        Cart cart = this.productService.fetchCartByUser(newUser);
+        List<CartDetail> lCartDetails = cart.getCartDetails();
+
+        double totalPrice = 0;
+        for (CartDetail cartDetail : lCartDetails) {
+            totalPrice += cartDetail.getPrice() * cartDetail.getQuantity();
+        }
+        model.addAttribute("listCartDetail", lCartDetails);
+        model.addAttribute("totalPrice", totalPrice);
+
+        return "client/cart/show";
     }
 
 }

@@ -32,8 +32,6 @@ public class UserController {
 
     @RequestMapping("/")
     public String getHomePage(Model model) {
-        model.addAttribute("eric", "test");
-        model.addAttribute("hoidanit", "from controller with model");
         return "hello";
     }
 
