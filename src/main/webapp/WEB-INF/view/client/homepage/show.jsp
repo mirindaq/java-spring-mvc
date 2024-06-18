@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+        <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
             <html lang="en">
 
             <head>
@@ -92,16 +93,18 @@
 
                                                                 </h4>
                                                                 <p style="font-size: 13px;">${product.shortDesc}</p>
-                                                                <div class="d-flex  flex-lg-wrap">
+                                                                <div class="d-flex  flex-lg-wrap justify-content-center">
                                                                     <p style="font-size: 15px; text-align: center; width: 100%;"
                                                                         class="text-dark  fw-bold mb-3">
                                                                         <fmt:formatNumber type="number"
                                                                             value="${product.price}" /> đ
                                                                     </p>
-                                                                    <a href="#"
+                                                                    <form:form action="/add-product-to-cart/${product.id}" method="post">
+                                                                        <button
                                                                         class="mx-auto btn border border-secondary rounded-pill px-3 text-primary"><i
                                                                             class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                                        Add to cart</a>
+                                                                        Add to cart</button>
+                                                                    </form:form>
                                                                 </div>
                                                             </div>
                                                         </div>
