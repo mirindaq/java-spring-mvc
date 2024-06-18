@@ -42,6 +42,13 @@ public class ItemController {
         return "redirect:/";
     }
 
+    @PostMapping("/delete-product-cart/{id}")
+    public String deleteProductCart(@PathVariable Long id, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        this.productService.handleDeleteProductFromCart(id, session);
+        return "redirect:/cart";
+    }
+
     @GetMapping("/cart")
     public String getCartPage(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
