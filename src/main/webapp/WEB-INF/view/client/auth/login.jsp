@@ -52,6 +52,10 @@
                                                             value="${_csrf.token}" />
 
                                                     </div>
+                                                    <%-- <div>
+                                                         Remember Me:
+                                                         <input type="checkbox" name="remember-me" />
+                                                    </div> --%>
 
                                                     <div class="mt-4 mb-0">
                                                         <div class="d-grid">

@@ -70,4 +70,9 @@ public class HomePageController {
         return "client/auth/deny";
     }
 
+    @GetMapping("/account-expired")
+    public String getExpiredPage() {
+        return "client/auth/expired";
+    }
+
 }
