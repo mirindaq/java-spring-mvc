@@ -9,10 +9,14 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpSession;
 import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
+import vn.hoidanit.laptopshop.domain.Order;
+import vn.hoidanit.laptopshop.domain.OrderDetail;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.repository.CartDetailRepository;
 import vn.hoidanit.laptopshop.repository.CartRepository;
+import vn.hoidanit.laptopshop.repository.OrderDetailRepository;
+import vn.hoidanit.laptopshop.repository.OrderRepository;
 import vn.hoidanit.laptopshop.repository.ProductRepository;
 
 @Service
@@ -21,13 +25,18 @@ public class ProductService {
     private final CartDetailRepository cartDetailRepository;
     private final CartRepository cartRepository;
     private final UserService userService;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     public ProductService(ProductRepository productRepository, CartDetailRepository cartDetailRepository,
-            CartRepository cartRepository, UserService userService) {
+            CartRepository cartRepository, UserService userService, OrderRepository orderRepository,
+            OrderDetailRepository orderDetailRepository) {
         this.productRepository = productRepository;
         this.cartDetailRepository = cartDetailRepository;
         this.cartRepository = cartRepository;
         this.userService = userService;
+        this.orderRepository = orderRepository;
+        this.orderDetailRepository = orderDetailRepository;
     }
 
     public Product createProduct(Product pr) {
@@ -50,7 +59,7 @@ public class ProductService {
         return this.cartRepository.findByUser(user);
     }
 
-    public void handleAddProductToCart(String email, Long productId, HttpSession session) {
+    public void handleAddProductToCart(String email, Long productId, HttpSession session, long quantity) {
         User user = this.userService.getUserByEmail(email);
         if (user != null) {
             Cart cart = this.cartRepository.findByUser(user);
@@ -72,7 +81,7 @@ public class ProductService {
                     cartDetail.setCart(cart);
                     cartDetail.setProduct(product);
                     cartDetail.setPrice(product.getPrice());
-                    cartDetail.setQuantity(1);
+                    cartDetail.setQuantity(quantity);
                     this.cartDetailRepository.save(cartDetail);
 
                     // update cart sum
@@ -82,7 +91,7 @@ public class ProductService {
                     session.setAttribute("sum", s);
                 } else {
                     CartDetail newCartDetail = this.cartDetailRepository.findByCartAndProduct(cart, product);
-                    newCartDetail.setQuantity(newCartDetail.getQuantity() + 1);
+                    newCartDetail.setQuantity(newCartDetail.getQuantity() + quantity);
                     this.cartDetailRepository.save(newCartDetail);
                 }
 
@@ -109,7 +118,8 @@ public class ProductService {
                 this.cartRepository.save(currentCart);
             } else {
                 // delete cart (sum = 1)
-                this.cartRepository.deleteById(currentCart.getId());
+                currentCart.setSum(0);
+                this.cartRepository.save(currentCart);
                 session.setAttribute("sum", 0);
             }
         }
@@ -124,5 +134,82 @@ public class ProductService {
                 this.cartDetailRepository.save(currentCartDetail);
             }
         }
+    }
+
+    public void handlePlaceOrder(User user, HttpSession session, String receiverName, String receiverAddress,
+            String receiverPhone) {
+        Cart cart = this.cartRepository.findByUser(user);
+        if (cart != null) {
+            List<CartDetail> lCartDetails = cart.getCartDetails();
+            double totalPrice = 0;
+            if (lCartDetails != null) {
+                for (CartDetail x : lCartDetails) {
+                    totalPrice += x.getPrice() * x.getQuantity();
+                }
+            }
+
+            Order order = new Order();
+            order.setUser(user);
+            order.setReceiverName(receiverName);
+            order.setReceiverAddress(receiverAddress);
+            order.setReceiverPhone(receiverPhone);
+            order.setStatus("PENDING");
+            order.setTotalPrice(totalPrice);
+            order = this.orderRepository.save(order);
+
+            if (lCartDetails != null) {
+                for (CartDetail x : lCartDetails) {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setOrder(order);
+                    orderDetail.setPrice(x.getPrice());
+                    orderDetail.setProduct(x.getProduct());
+                    orderDetail.setQuantity(x.getQuantity());
+
+                    this.orderDetailRepository.save(orderDetail);
+                }
+
+                for (CartDetail x : lCartDetails) {
+                    this.cartDetailRepository.deleteById(x.getId());
+                }
+                session.setAttribute("sum", 0);
+            }
+
+            cart.setSum(0);
+
+        }
+    }
+
+    public List<Order> fetchOrders() {
+        return this.orderRepository.findAll();
+    }
+
+    public List<Order> fetchOrdersByUser(User user) {
+        return this.orderRepository.findByUser(user);
+    }
+
+    public Order findOrderById(Long id) {
+        return this.orderRepository.findById(id).get();
+    }
+
+    public Order createOrder(Order order) {
+        return this.orderRepository.save(order);
+    }
+
+    public void deleteOrderById(Long id) {
+        this.orderRepository.deleteById(id);
+    }
+
+    public void handleDeleteOrder(Long id) {
+        Order order = this.orderRepository.findById(id).get();
+        if (order != null) {
+            List<OrderDetail> lOrderDetails = order.getOrderDetails();
+            if (lOrderDetails != null) {
+                for (OrderDetail orderDetail : lOrderDetails) {
+                    this.orderDetailRepository.deleteById(orderDetail.getId());
+                }
+            }
+            this.orderRepository.deleteById(id);
+        }
+
     }
 }

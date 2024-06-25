@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
+import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.service.ProductService;
@@ -42,11 +43,11 @@ public class ItemController {
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
         // String email = authentication.getName();
-        this.productService.handleAddProductToCart(email, id, session);
+        this.productService.handleAddProductToCart(email, id, session, 1);
         return "redirect:/";
     }
 
-    @PostMapping("/delete-product-cart/{id}")
+    @PostMapping("/delete-cart-product/{id}")
     public String deleteProductCart(@PathVariable Long id, HttpServletRequest request) {
         HttpSession session = request.getSession();
         this.productService.handleDeleteProductFromCart(id, session);
@@ -107,9 +108,38 @@ public class ItemController {
             @RequestParam("receiverName") String receiverName,
             @RequestParam("receiverAddress") String receiverAddress,
             @RequestParam("receiverPhone") String receiverPhone) {
+        User currentUser = new User();// null
+        HttpSession session = request.getSession(false);
+        long id = (long) session.getAttribute("id");
+        currentUser.setId(id);
+
+        this.productService.handlePlaceOrder(currentUser, session, receiverName, receiverAddress, receiverPhone);
+        return "client/cart/thanks";
+    }
+
+    @GetMapping("/order-history")
+    public String getOrderHistoryPage(Model model, HttpServletRequest request) {
+        User currentUser = new User();// null
+        HttpSession session = request.getSession(false);
+        long id = (long) session.getAttribute("id");
+        currentUser.setId(id);
+
+        List<Order> lOrders = this.productService.fetchOrdersByUser(currentUser);
+
+        model.addAttribute("orders", lOrders);
+        return "client/cart/order-history";
+    }
+
+    @PostMapping("/add-product-from-view-detail")
+    public String handleAddProductFromViewDetail(
+            @RequestParam("id") Long id,
+            @RequestParam("quantity") Long quantity,
+            HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
-        return "redirect:/";
+        String email = (String) session.getAttribute("email");
+        this.productService.handleAddProductToCart(email, id, session, quantity);
+        return "redirect:/product/" + id;
     }
 
 }
