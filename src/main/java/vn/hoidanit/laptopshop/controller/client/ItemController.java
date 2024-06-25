@@ -98,8 +98,18 @@ public class ItemController {
     @PostMapping("/confirm-checkout")
     public String getCheckoutPage(@ModelAttribute("cart") Cart cart) {
         List<CartDetail> lCartDetails = cart == null ? new ArrayList<>() : cart.getCartDetails();
-
+        this.productService.handleUpdateCartBeforeCheckout(lCartDetails);
         return "redirect:/checkout";
+    }
+
+    @PostMapping("/place-order")
+    public String handlePlaceOrder(HttpServletRequest request,
+            @RequestParam("receiverName") String receiverName,
+            @RequestParam("receiverAddress") String receiverAddress,
+            @RequestParam("receiverPhone") String receiverPhone) {
+        HttpSession session = request.getSession(false);
+
+        return "redirect:/";
     }
 
 }
